@@ -1,20 +1,20 @@
 resource "aws_instance" "public" {
-  ami                         = "ami-0e8ebb0ab254bb563" # find the AMI ID of Amazon Linux 2023  
+  ami                         = "ami-04c913012f8977029"
   instance_type               = "t2.micro"
   subnet_id                   = "subnet-0a61b179394ae66c8"  #Public Subnet ID, e.g. subnet-xxxxxxxxxxx
   associate_public_ip_address = true
-  key_name                    = "CE10-eric-key-pair" #Change to your keyname, e.g. jazeel-key-pair
+  key_name                    = "eric-bastion-key-pair" #Change to your keyname, e.g. jazeel-key-pair
   vpc_security_group_ids = [aws_security_group.allow_ssh.id]
  
   tags = {
-    Name = "ce10-eric-ec2"    #Prefix your own name, e.g. jazeel-ec2
+    Name = "${var.name}-ec2"     #Prefix your own name, e.g. jazeel-ec2
   }
 }
 
 resource "aws_security_group" "allow_ssh" {
   name        = "eric-terraform-security-group" #Security group name, e.g. jazeel-terraform-security-group
   description = "Allow SSH inbound"
-  vpc_id      = "vpc-0e9e0e02f6316c32e"  #VPC ID (Same VPC as your EC2 subnet above), E.g. vpc-xxxxxxx
+  vpc_id      = data.aws_vpc.selected.id  #VPC ID (Same VPC as your EC2 subnet above), E.g. vpc-xxxxxxx
 }
 
 resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv4" {

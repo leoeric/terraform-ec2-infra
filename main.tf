@@ -1,7 +1,7 @@
 resource "aws_instance" "public" {
-  ami                         = "ami-04c913012f8977029"
+  ami                         = data.aws_ami.amazon_linux_2023.id
   instance_type               = "t2.micro"
-  subnet_id                   = "subnet-0a61b179394ae66c8"  #Public Subnet ID, e.g. subnet-xxxxxxxxxxx
+  subnet_id                   = data.aws_subnets.public.ids[0]  #Public Subnet ID, e.g. subnet-xxxxxxxxxxx
   associate_public_ip_address = true
   key_name                    = "eric-bastion-key-pair" #Change to your keyname, e.g. jazeel-key-pair
   vpc_security_group_ids = [aws_security_group.allow_ssh.id]
